@@ -42,19 +42,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const currentUser = auth.currentUser;
-  const userDataStore = userData()
+  
 
   if (requiresAuth && !currentUser) {
     next('/');
   } else if (to.name === 'LoginPage' && currentUser) {
-    userDataStore.setUser(userDataStore, {
-        displayName: user.displayName,
-        email: user.email,
-        emailVerified: user.emailVerified,
-        photoURL: user.photoURL,
-        uid: user.uid
-        
-    });
+    
     next('/home');
   } else {
     next();

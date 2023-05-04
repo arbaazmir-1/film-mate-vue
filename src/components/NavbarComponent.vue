@@ -1,7 +1,7 @@
 <template lang="pug">
 //full screen navbar
 .flex.w-screen.h-20.bg-white.justify-between.items-center.p-2.fixed.top-0.z-50.shadow-md 
-    .logo.flex.items-center.ml-8
+    router-link(to="/").logo.flex.items-center.ml-8
         h1.text-2xl.font-bold.text-blue-500 Film
         h1.text-2xl.font-bold.text-gray-700 Mate
     
@@ -24,7 +24,7 @@
 div.flex.items-center.bg-white.fixed.bottom-0.left-0.right-0.h-16.p-2.text-black(class="md:hidden").z-50.border-t-2.border-gray-200
     ul.flex.items-center(class="justify-evenly w-full h-full")
         li
-            router-link(to="/") Home
+            router-link(to="/home") Home
         li
             router-link(to="/search") Search
         li
