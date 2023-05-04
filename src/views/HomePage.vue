@@ -1,23 +1,15 @@
-<template>
-    <div>
-      
-      <navbar-component />
-      <div class="">
-
-      </div>
-    </div>
-  </template>
+<template lang="pug">
+h1.mt-20 home page  
+</template>
   
   <script>
   import { reactive, toRefs } from 'vue'
   import { auth } from '../firebase'
   import router from '../router'
-  import NavbarComponent from '../components/NavbarComponent.vue'
+  
   
   export default {
-    components: {
-      NavbarComponent,
-    },
+    
     setup() {
       const state = reactive({
         user: null,

@@ -6,10 +6,10 @@
         h1.text-2xl.font-bold.text-gray-700 Mate
     
     //menu items, create group, search friend, watchlist
-    .hidden.items-center.mr-8(class="md:flex")
+    .hidden.items-center.mr-8(class="md:flex").text-black
         ul.flex.items-center
             li.mr-8
-                router-link(to="/") Home
+                router-link(to="/home") Home
             
             li.mr-8
                 router-link(to="/search") Search
@@ -21,7 +21,7 @@
     button(@click="showModal").p-2.bg-red-500.text-white.rounded Logout
     modal(v-if="modalVisible" @closeModal="modalVisible = false" :message="message" :buttonName="buttonName" :method="logout" :title="'Logout'")
 //in mobile view a bottom navbar 
-div.flex.items-center.bg-white.fixed.bottom-0.left-0.right-0.h-16.p-2(class="md:hidden").z-50.border-t-2.border-gray-200
+div.flex.items-center.bg-white.fixed.bottom-0.left-0.right-0.h-16.p-2.text-black(class="md:hidden").z-50.border-t-2.border-gray-200
     ul.flex.items-center(class="justify-evenly w-full h-full")
         li
             router-link(to="/") Home

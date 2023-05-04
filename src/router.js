@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginPage from '@/views/LoginPage.vue'
 import { auth } from './firebase'
-import HomePage from '@/views/HomePage.vue'
+import { userData } from './stores/userState'
+
+
+
 
 const routes = [
   {
@@ -14,6 +16,12 @@ const routes = [
     path: '/home',
     name: 'HomePage',
     component: () => import('@/views/HomePage.vue'),
+    meta: { requiresAuth: true } // set meta field to true as this page requires authentication
+  },
+  {
+    path: '/profile',
+    name: 'ProfilePage',
+    component: () => import('@/views/ProfilePage.vue'),
     meta: { requiresAuth: true } // set meta field to true as this page requires authentication
   },
   //404 page
@@ -34,10 +42,19 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const currentUser = auth.currentUser;
+  const userDataStore = userData()
 
   if (requiresAuth && !currentUser) {
     next('/');
   } else if (to.name === 'LoginPage' && currentUser) {
+    userDataStore.setUser(userDataStore, {
+        displayName: user.displayName,
+        email: user.email,
+        emailVerified: user.emailVerified,
+        photoURL: user.photoURL,
+        uid: user.uid
+        
+    });
     next('/home');
   } else {
     next();
@@ -46,8 +63,19 @@ router.beforeEach((to, from, next) => {
 
 // redirect to home page if user is already signed in
 router.isReady().then(() => {
+    const userDataStore = userData()
+
   auth.onAuthStateChanged(user => {
     if (user) {
+        userDataStore.setUser(userDataStore, {
+            displayName: user.displayName,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            photoURL: user.photoURL,
+            uid: user.uid
+
+        });
+        
       router.push('/home');
     }
   });

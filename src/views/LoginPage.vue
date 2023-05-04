@@ -37,12 +37,17 @@
   import welcome from '../assets/welcome.json'
   import { auth } from '../firebase'
   import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-  
+  import {userData} from '../stores/userState'
+
   
   const provider = new GoogleAuthProvider();
   
   export default {
     setup() {
+
+
+        const userDataStore = userData()
+
       const formAction = () => {
         signInWithPopup(auth, provider)
           .then((result) => {
@@ -53,6 +58,8 @@
             const user = result.user;
             console.log(user)
             // IdP data available using getAdditionalUserInfo(result)
+            userDataStore.setUser(user)
+            
             // ...
           })
           .catch((error) => {
