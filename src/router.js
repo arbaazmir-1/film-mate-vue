@@ -30,6 +30,13 @@ const routes = [
     component: () => import('@/views/SearchPage.vue'),
     meta: { requiresAuth: true } // set meta field to true as this page requires authentication
   },
+  {
+    path: '/friends',
+    name: 'FriendsPage',
+    component: () => import('@/views/FriendsPage.vue'),
+    meta: { requiresAuth: true } // set meta field to true as this page requires authentication
+
+  },
   //404 page
   {
     path: '/:pathMatch(.*)*',

@@ -11,7 +11,7 @@
       button.bg-blue-500.text-white.font-medium.py-2.px-4.rounded-full(class="hover:bg-blue-600" @click="method")
         | {{ btnName }}
       button.bg-red-500.text-white.font-medium.py-2.px-4.rounded-full.ml-4(class="hover:bg-red-600" @click="closeModal")
-        | Cancel
+        | {{ cancelBtnName ? cancelBtnName : 'Cancel'  }} 
 </template>
 <script>
 import { defineComponent, ref, defineEmits } from 'vue'
@@ -21,7 +21,8 @@ export default defineComponent({
     message: { type: String, default: '' },
     title: { type: String, default: '' },
     buttonName: { type: String, default: '' },
-    method: { type: Function, default: () => {} }
+    method: { type: Function, default: () => {} },
+    cancelBtnName : {type: String, default: 'Cancel'}
   },
 
   emits: ['closeModal'], // define the emitted event
@@ -31,6 +32,7 @@ export default defineComponent({
     const msg = ref(props.message)
     const titleMsg = ref(props.title)
     const btnName = ref(props.buttonName)
+    const cancelBtnName = ref(props.cancelBtnName)
     const method = () => {
       props.method()
       emit('closeModal') // emit the event
@@ -45,7 +47,8 @@ export default defineComponent({
       titleMsg,
       btnName,
       closeModal,
-      method
+      method,
+      cancelBtnName
     }
   }
 })

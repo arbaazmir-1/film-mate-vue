@@ -10,10 +10,11 @@
                 img(:src="arr.photoUrl").rounded-full.w-10.h-10
                 h1.text-xl.m-2 {{arr.name}}
                 button(@click="addFriend(arr.uid)" class="ml-auto" :disabled="arr.requestSent").p-2.bg-blue-500.text-white.rounded {{arr.requestSent ? 'Request Sent' : 'Add Friend'}}
-    .loadingData.flex.flex-col.items-center.w-full(class="md:w-1/2").bg-white.overflow-y-auto.my-10(v-if="loading")
+    .loadingData.flex.flex-col.items-center.w-full(class="md:w-1/2" v-if="loading").bg-white.overflow-y-auto.my-10
         h1.text-2xl.font-bold.text-start.my-4.text-black Loading...
-    .errorData.flex.flex-col.items-center.w-full(class="md:w-1/2").bg-white.overflow-y-auto.my-10(v-if="error")
+    .errorData.flex.flex-col.items-center.w-full(class="md:w-1/2" v-if="error").bg-white.overflow-y-auto.my-10
         h1.text-2xl.font-bold.text-start.my-4.text-black {{error}}
+modal(v-if="modalVisible" @closeModal="modalVisible = false" :message="message" :buttonName="buttonName" :method="closeModal" :title="title" :cancelBtnNam="cancelBtnName" )
         
             
        
@@ -38,14 +39,20 @@ import {
   arrayUnion,
   arrayRemove
 } from 'firebase/firestore'
+import Modal from '../components/ModalComponent.vue'
 
 export default {
+    components: {
+        Modal
+    },
   setup() {
     const state = reactive({
       searchQuery: '',
       searchResults: [],
       loading: false,
-      error: null
+      error: null,
+      modalVisible: false
+      
     })
     const validateEmail = (email) => {
       return email.match(
@@ -111,7 +118,16 @@ export default {
         state.searchResults = []
       }
     }
-
+    const message = ' Friend request sent'
+    const buttonName = 'Ok'
+    const title = 'Friend Request Sent'
+    const cancelBtnName = 'Close'
+    const showModal = () => {
+      state.modalVisible = true
+    }
+    const closeModal = () => {
+      state.modalVisible = false
+    }
     const addFriend = (uid) => {
       //check if the user is already a friend
         const userRef = doc(db, 'users', user.uid)
@@ -131,6 +147,15 @@ export default {
                     updateDoc(userRef2, {
                         friendsRequestReceived: arrayUnion(user.uid)
                     })
+                    //show the modal
+                    showModal()
+                    //update the search results array
+                    state.searchResults.forEach((arr)=>{
+                        if(arr.uid === uid){
+                            arr.requestSent = true
+                        }
+                    })
+
 
                 }
             } else {
@@ -148,7 +173,13 @@ export default {
       ...toRefs(state),
       user,
       searchFriend,
-      addFriend
+      addFriend,
+        message,
+        buttonName,
+        showModal,
+        closeModal,
+        title,
+        cancelBtnName
     }
   }
 }

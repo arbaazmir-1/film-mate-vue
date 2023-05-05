@@ -74,8 +74,9 @@
                         uid: user.uid,
                         groups: [],
                         friends: [],
-                        friendRequests: [],
+                        friendsRequestSend: [],
                         watchList: [],
+                        friendsRequestReceived: [],
                     }).then(() => {
                         console.log("Document successfully written!");
                     }).catch((error) => {
