@@ -24,6 +24,12 @@ const routes = [
     component: () => import('@/views/ProfilePage.vue'),
     meta: { requiresAuth: true } // set meta field to true as this page requires authentication
   },
+  {
+    path: '/search',
+    name: 'SearchPage',
+    component: () => import('@/views/SearchPage.vue'),
+    meta: { requiresAuth: true } // set meta field to true as this page requires authentication
+  },
   //404 page
   {
     path: '/:pathMatch(.*)*',

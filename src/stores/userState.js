@@ -15,7 +15,6 @@ export const userData = defineStore('userData', {
   },
   actions: {
     setUser: (state, user) => {
-      console.log(user)
       state.user = user
     }
   

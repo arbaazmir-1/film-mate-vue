@@ -39,7 +39,6 @@ div.flex.items-center.bg-white.fixed.bottom-0.left-0.right-0.h-16.p-2.text-black
 import { reactive, toRefs } from 'vue'
 import Modal from '../components/ModalComponent.vue'
 import { logout } from '../methods'
-import router from '../router'
 
 export default {
   components: {

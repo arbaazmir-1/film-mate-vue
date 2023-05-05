@@ -35,9 +35,10 @@
   <script>
   import { ref } from 'vue'
   import welcome from '../assets/welcome.json'
-  import { auth } from '../firebase'
+  import { auth,db } from '../firebase'
   import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
   import {userData} from '../stores/userState'
+  import {doc, getDoc,setDoc} from 'firebase/firestore'
 
   
   const provider = new GoogleAuthProvider();
@@ -56,7 +57,40 @@
             const token = credential.accessToken;
             // The signed-in user info.
             const user = result.user;
-            console.log(user)
+            
+            //check if the user exits in firestore database
+            const userRef = doc(db, "users", user.uid);
+            getDoc(userRef).then((docSnap) => {
+                if (docSnap.exists()) {
+                    console.log("Document data:", docSnap.data());
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                    //add user to firestore database
+                    setDoc(userRef, {
+                        name: user.displayName,
+                        email: user.email,
+                        photoURL: user.photoURL,
+                        uid: user.uid,
+                        groups: [],
+                        friends: [],
+                        friendRequests: [],
+                        watchList: [],
+                    }).then(() => {
+                        console.log("Document successfully written!");
+                    }).catch((error) => {
+                        console.error("Error writing document: ", error);
+                    });
+
+                }
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
+
+            
+
+
+
             // IdP data available using getAdditionalUserInfo(result)
             userDataStore.setUser(user)
             
@@ -66,8 +100,8 @@
             // Handle Errors here.
             const errorCode = error.code;
             const errorMessage = error.message;
-            // The email of the user's account used.
-            const email = error.customData.email;
+            
+            
             // The AuthCredential type that was used.
             const credential = GoogleAuthProvider.credentialFromError(error);
             // ...
